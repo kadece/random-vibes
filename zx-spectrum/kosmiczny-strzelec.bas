@@ -1,0 +1,44 @@
+10 REM KOSMICZNY STRZELEC - ZX SPECTRUM 48K
+20 BORDER 0: PAPER 0: INK 7: CLS
+30 LET w=0: LET z=3: LET px=15
+40 DIM ax(6): DIM ay(6)
+50 DIM bx(4): DIM by(4): DIM bb(4)
+60 FOR i=1 TO 6: GOSUB 500: NEXT i
+70 FOR i=1 TO 4: LET bb(i)=0: NEXT i
+80 REM PETLA GLOWNA
+90 IF z=0 THEN GOTO 900
+100 PRINT AT 0,0;"WYNIK:";w;"     ZYCIA:";z;"     "
+110 PRINT AT 21,px;"^"
+120 LET k$=INKEY$
+130 IF k$="5" AND px>0 THEN PRINT AT 21,px;" ": LET px=px-1
+140 IF k$="8" AND px<31 THEN PRINT AT 21,px;" ": LET px=px+1
+150 IF k$=" " THEN GOSUB 600
+160 FOR i=1 TO 4
+170 IF bb(i)=1 THEN PRINT AT by(i),bx(i);" ": LET by(i)=by(i)-1: IF by(i)<1 THEN LET bb(i)=0 ELSE PRINT AT by(i),bx(i);"|"
+180 NEXT i
+190 FOR i=1 TO 6
+200 IF ay(i)>=1 THEN PRINT AT ay(i),ax(i);" "
+210 LET ay(i)=ay(i)+1
+220 IF ay(i)>21 THEN GOSUB 500
+230 IF ay(i)>=1 AND ay(i)<=21 THEN PRINT AT ay(i),ax(i);"O"
+240 FOR j=1 TO 4
+250 IF bb(j)=1 AND bx(j)=ax(i) AND by(j)>=ay(i)-1 AND by(j)<=ay(i)+1 THEN LET bb(j)=0: PRINT AT by(j),bx(j);" ": PRINT AT ay(i),ax(i);" ": GOSUB 500: LET w=w+10: BEEP 0.2,10
+260 NEXT j
+270 NEXT i
+280 FOR i=1 TO 6
+290 IF ay(i)=21 AND ax(i)=px THEN LET z=z-1: PRINT AT 21,px;"*": BEEP 0.5,0: PAUSE 30: GOSUB 500
+300 NEXT i
+310 PAUSE 2
+320 GOTO 90
+500 REM NOWY ASTEROIDA
+510 LET ax(i)=INT (RND*32): LET ay(i)=-INT (RND*8)
+520 RETURN
+600 REM STRZAL
+610 FOR i=1 TO 4
+620 IF bb(i)=0 THEN LET bb(i)=1: LET bx(i)=px: LET by(i)=20: RETURN
+630 NEXT i
+640 RETURN
+900 REM KONIEC GRY
+910 CLS: PRINT AT 10,6;"KONIEC GRY!";AT 13,8;"WYNIK:";w: PRINT AT 16,3;"NACISNIJ DOWOLNY KLAWISZ"
+920 IF INKEY$="" THEN GOTO 920
+930 CLS: RUN
